@@ -110,7 +110,7 @@ export function setupBackgroundMusic(options = {}) {
 
   const bgAudio = new Audio(audioSrc);
   bgAudio.loop = true;
-  bgAudio.volume = 0.45;
+  bgAudio.volume = 0.2;
   bgAudio.preload = "auto";
 
   let isMuted = localStorage.getItem(storageKey) === "true";
