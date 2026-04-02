@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/ico/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Na's Portfolio</title>
+  </head>
+  <body>
+    <style>
+      @font-face {
+        font-family: monogram;
+        src: url(monogram.ttf);
+      }
+
+      :root {
+        --experience-overlay: rgba(8, 6, 22, 0.8);
+        --experience-panel-bg: rgba(15, 23, 42, 0.94);
+        --experience-panel-border: #f8b04e;
+        --experience-panel-border-inner: #2f3d5f;
+        --experience-panel-shadow: rgba(3, 6, 15, 0.72);
+        --experience-title: #fde68a;
+        --experience-text: #f8fafc;
+        --experience-muted: #c4d1e4;
+        --experience-accent: #7dd3fc;
+        --experience-card-bg: rgba(10, 19, 35, 0.72);
+        --experience-card-border: #3c5078;
+        --experience-chip-bg: rgba(248, 176, 78, 0.18);
+        --experience-chip-text: #ffedd5;
+        --experience-button-bg: #f97316;
+        --experience-button-border: #fdba74;
+        --experience-button-text: #fff7ed;
+      }
+
+      body {
+        font-family: monogram, monospace;
+        font-size: 2rem;
+        overflow: hidden;
+      }
+
+      #app {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      #textbox {
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        bottom: 2vh;
+        min-height: 10vh;
+        background: white;
+        border-radius: 3px;
+        outline-style: solid;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        word-spacing: 0.2rem;
+        filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
+        /* overflow: auto; */
+      }
+
+      .ui-text {
+        margin: 0;
+        user-select: none;
+      }
+
+      .ui-close-btn {
+        font-family: monogram, monospace;
+        border-style: none;
+        border-radius: 3px;
+        padding: 1rem;
+        font-size: inherit;
+      }
+
+      .ui-secondary-btn {
+        font-family: monogram, monospace;
+        border: 1px solid #fdba74;
+        border-bottom-width: 2px;
+        border-radius: 3px;
+        padding: 1rem;
+        font-size: inherit;
+        color: #fff7ed;
+        background: #f97316;
+      }
+
+      .btn-container {
+        align-self: flex-end;
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.6rem;
+      }
+
+      .guide-panel {
+        position: absolute;
+        left: 2%;
+        top: 1.5vh;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        width: min(470px, 94vw);
+        padding: 0.95rem 1rem;
+        border: 2px solid #f8b04e;
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.78);
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+        color: #f8fafc;
+        font-family: monogram, monospace;
+        font-size: 24px;
+        line-height: 1.14;
+        letter-spacing: 0.03em;
+        text-shadow: 0 1px 0 rgba(15, 23, 42, 0.65);
+        transition: width 0.2s ease;
+      }
+
+      .guide-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .guide-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .guide-title {
+        margin: 0;
+        font-size: 1.08em;
+        letter-spacing: 0.02em;
+        color: #fde68a;
+      }
+
+      .guide-toggle {
+        border: 1px solid #fdba74;
+        border-bottom-width: 2px;
+        border-radius: 8px;
+        padding: 0.12rem 0.5rem;
+        background: rgba(249, 115, 22, 0.22);
+        color: #ffedd5;
+        font-family: monogram, monospace;
+        font-size: 0.86em;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .audio-toggle {
+        border: 1px solid #fdba74;
+        border-bottom-width: 2px;
+        border-radius: 8px;
+        width: 2.05em;
+        height: 1.8em;
+        padding: 0;
+        background: rgba(125, 211, 252, 0.15);
+        color: #e0f2fe;
+        font-family: monogram, monospace;
+        font-size: 0.9em;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .guide-body {
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .guide-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.22rem;
+      }
+
+      .guide-list li {
+        margin: 0;
+      }
+
+      .guide-key {
+        border: 1px solid #fdba74;
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        padding: 0.1rem 0.38rem;
+        background: rgba(249, 115, 22, 0.2);
+        font-weight: 700;
+        color: #ffedd5;
+      }
+
+      .guide-subtitle {
+        margin: 0.2rem 0 0;
+        font-weight: 700;
+        color: #bae6fd;
+      }
+
+      .guide-checkpoints {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.16rem;
+      }
+
+      .guide-panel.is-collapsed {
+        width: min(240px, 62vw);
+      }
+
+      .guide-panel.is-collapsed .guide-body {
+        display: none;
+      }
+
+      #projects-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background:
+          linear-gradient(
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          ),
+          var(--experience-overlay);
+        background-size: 12px 12px, 12px 12px, auto;
+      }
+
+      #projects-modal.show {
+        display: flex;
+      }
+
+      .projects-panel {
+        position: relative;
+        width: min(1120px, 96vw);
+        max-height: 86vh;
+        overflow: auto;
+        border: 3px solid var(--experience-panel-border);
+        box-shadow: inset 0 0 0 2px var(--experience-panel-border-inner),
+          0 16px 0 rgba(6, 12, 24, 0.6),
+          0 24px 42px var(--experience-panel-shadow);
+        background: var(--experience-panel-bg);
+        color: var(--experience-text);
+        padding: 0.95rem 1rem 1rem;
+        font-family: monogram, monospace;
+        font-size: 26px;
+        line-height: 1.25;
+        image-rendering: pixelated;
+      }
+
+      .projects-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.7rem;
+        margin-bottom: 0.7rem;
+      }
+
+      .projects-title {
+        margin: 0;
+        font-size: 1.38em;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--experience-title);
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.36);
+      }
+
+      .projects-close {
+        border: 1px solid var(--experience-button-border);
+        border-bottom-width: 3px;
+        background: var(--experience-button-bg);
+        color: var(--experience-button-text);
+        font-family: monogram, monospace;
+        width: 1.8em;
+        height: 1.8em;
+        cursor: pointer;
+        font-size: 0.94em;
+        line-height: 1;
+        transition: filter 0.16s ease;
+      }
+
+      .projects-close:hover {
+        filter: brightness(1.1);
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+
+      .project-card {
+        border: 2px solid var(--experience-card-border);
+        background: var(--experience-card-bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 255px;
+        overflow: hidden;
+        transition: transform 0.16s ease, filter 0.16s ease, border-color 0.16s ease;
+      }
+
+      .project-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--experience-panel-border);
+        filter: brightness(1.05);
+      }
+
+      .project-media {
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-bottom: 2px solid var(--experience-card-border);
+        background: #17243e;
+      }
+
+      .project-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .project-image.is-fallback {
+        object-fit: cover;
+        filter: saturate(0.85) contrast(0.94);
+      }
+
+      .project-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 0.7rem 0.78rem 0.76rem;
+      }
+
+      .project-card h3 {
+        margin: 0 0 0.35rem;
+        font-size: 1.02em;
+        color: var(--experience-title);
+        line-height: 1.2;
+      }
+
+      .project-card p {
+        margin: 0 0 0.5rem;
+        font-size: 0.82em;
+        line-height: 1.36;
+        color: var(--experience-muted);
+        min-height: 4.25em;
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.24rem;
+        margin-bottom: 0.55rem;
+      }
+
+      .project-tags span {
+        font-size: 0.72em;
+        border: 1px solid var(--experience-card-border);
+        color: var(--experience-chip-text);
+        background: var(--experience-chip-bg);
+        padding: 0.14rem 0.4rem;
+      }
+
+      .project-links {
+        display: flex;
+        gap: 0.34rem;
+        margin-top: auto;
+      }
+
+      .project-links a {
+        flex: 1;
+        text-align: center;
+        font-size: 0.74em;
+        font-weight: 700;
+        color: var(--experience-button-text);
+        text-decoration: none;
+        border: 1px solid #8fa8cc;
+        border-bottom-width: 2px;
+        padding: 0.3rem 0.24rem;
+        background: #30486e;
+        transition: filter 0.16s ease;
+      }
+
+      .project-links a:hover {
+        filter: brightness(1.08);
+      }
+
+      .project-links a.secondary {
+        border-color: var(--experience-button-border);
+        background: var(--experience-button-bg);
+        color: var(--experience-button-text);
+      }
+
+      .project-links a.secondary:hover {
+        filter: brightness(1.1);
+      }
+
+      .project-links a.disabled {
+        border-color: #495d82;
+        background: #2a3b59;
+        color: #8ea2c4;
+        pointer-events: none;
+      }
+
+      #experience-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background:
+          linear-gradient(
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          ),
+          var(--experience-overlay);
+        background-size: 12px 12px, 12px 12px, auto;
+      }
+
+      #experience-modal.show {
+        display: flex;
+      }
+
+      .experience-panel {
+        width: min(880px, 96vw);
+        max-height: 86vh;
+        overflow: auto;
+        border: 3px solid var(--experience-panel-border);
+        box-shadow: inset 0 0 0 2px var(--experience-panel-border-inner),
+          0 16px 0 rgba(6, 12, 24, 0.6),
+          0 24px 42px var(--experience-panel-shadow);
+        background: var(--experience-panel-bg);
+        color: var(--experience-text);
+        padding: 1rem 1.1rem 1.05rem;
+        font-family: monogram, monospace;
+        font-size: 24px;
+        line-height: 1.26;
+        image-rendering: pixelated;
+      }
+
+      .experience-eyebrow {
+        margin: 0;
+        font-size: 0.72em;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--experience-accent);
+      }
+
+      .experience-title {
+        margin: 0.2rem 0 0.32rem;
+        font-size: 1.34em;
+        line-height: 1.16;
+        color: var(--experience-title);
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.36);
+      }
+
+      .experience-intro {
+        margin: 0 0 0.85rem;
+        color: var(--experience-muted);
+        font-size: 0.88em;
+        line-height: 1.28;
+      }
+
+      .experience-timeline {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .experience-card {
+        border: 2px solid var(--experience-card-border);
+        padding: 0.72rem 0.8rem;
+        background: var(--experience-card-bg);
+      }
+
+      .experience-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.38rem;
+      }
+
+      .experience-role {
+        margin: 0;
+        font-size: 0.97em;
+        line-height: 1.2;
+        color: var(--experience-title);
+      }
+
+      .experience-company {
+        margin: 0.14rem 0 0;
+        font-size: 0.82em;
+        font-weight: 600;
+        color: #ffd7a3;
+      }
+
+      .experience-period {
+        align-self: flex-start;
+        padding: 0.19rem 0.42rem;
+        border: 1px solid var(--experience-card-border);
+        background: rgba(34, 50, 79, 0.8);
+        color: var(--experience-muted);
+        font-size: 0.72em;
+        font-weight: 600;
+      }
+
+      .experience-description {
+        margin: 0 0 0.4rem;
+        font-size: 0.8em;
+        line-height: 1.35;
+      }
+
+      .experience-block-title {
+        margin: 0.4rem 0 0.22rem;
+        font-size: 0.72em;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--experience-accent);
+      }
+
+      .experience-points {
+        margin: 0;
+        padding-left: 0.78rem;
+        display: grid;
+        gap: 0.08rem;
+      }
+
+      .experience-points li {
+        font-size: 0.78em;
+        line-height: 1.33;
+      }
+
+      .experience-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.2rem;
+      }
+
+      .experience-chip {
+        border: 1px solid var(--experience-card-border);
+        padding: 0.14rem 0.37rem;
+        font-size: 0.68em;
+        font-weight: 600;
+        background: var(--experience-chip-bg);
+        color: var(--experience-chip-text);
+      }
+
+      .experience-divider {
+        border: 0;
+        border-top: 2px dashed var(--experience-card-border);
+        margin: 0.06rem 0 0.1rem;
+      }
+
+      .experience-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.8rem;
+      }
+
+      .experience-close-btn {
+        border: 1px solid var(--experience-button-border);
+        border-bottom-width: 3px;
+        padding: 0.22rem 0.72rem;
+        font-family: monogram, monospace;
+        font-size: 0.84em;
+        font-weight: 700;
+        color: var(--experience-button-text);
+        background: var(--experience-button-bg);
+        cursor: pointer;
+        transition: filter 0.16s ease;
+      }
+
+      .experience-close-btn:hover {
+        filter: brightness(1.1);
+      }
+
+      @media (max-width: 680px) {
+        .guide-panel {
+          left: 2.5%;
+          top: 1vh;
+          width: min(540px, 95vw);
+          padding: 0.78rem 0.85rem;
+          font-size: 20px;
+        }
+
+        .guide-title {
+          font-size: 1.05em;
+        }
+
+        .guide-panel.is-collapsed {
+          width: min(235px, 70vw);
+        }
+
+        .projects-title {
+          font-size: 1.28em;
+        }
+
+        .projects-panel {
+          width: min(980px, 97vw);
+          padding: 0.74rem 0.76rem 0.82rem;
+          font-size: 22px;
+        }
+
+        .projects-grid {
+          grid-template-columns: 1fr;
+          gap: 0.6rem;
+        }
+
+        .project-card {
+          min-height: 0;
+        }
+
+        .experience-panel {
+          padding: 0.75rem 0.8rem;
+          width: min(920px, 97vw);
+          font-size: 20px;
+        }
+
+        .experience-title {
+          font-size: 1.25em;
+        }
+      }
+    </style>
+    <div id="app">
+      <div>
+        <aside class="guide-panel" aria-label="Game controls and checkpoints">
+          <div class="guide-header">
+            <h2 class="guide-title">Controls and Checkpoints</h2>
+            <div class="guide-controls">
+              <button id="audio-toggle" class="audio-toggle" type="button" aria-label="Toggle background music" aria-pressed="false">
+                🔊
+              </button>
+              <button id="guide-toggle" class="guide-toggle" type="button" aria-controls="guide-body" aria-expanded="true">
+                Hide
+              </button>
+            </div>
+          </div>
+          <div id="guide-body" class="guide-body">
+            <ul class="guide-list">
+              <li>
+                Move: <span class="guide-key">W A S D</span> /
+                <span class="guide-key">Arrow Keys</span> or click/tap to move.
+              </li>
+              <li>
+                Run faster: hold <span class="guide-key">Shift</span> while moving.
+              </li>
+              <li>
+                Jump: press <span class="guide-key">Space</span>.
+              </li>
+              <li>
+                Music: press <span class="guide-key">M</span> or use the speaker button.
+              </li>
+              <li>Red markers show interaction checkpoints on the map.</li>
+            </ul>
+
+            <p class="guide-subtitle">Checkpoint Areas</p>
+            <ul class="guide-checkpoints">
+              <li>Welcome: upper-right area.</li>
+              <li>About: upper-left area.</li>
+              <li>Skills: near About (upper-left).</li>
+              <li>Projects: lower-left area.</li>
+              <li>Experience: lower-right area.</li>
+            </ul>
+          </div>
+        </aside>
+        <div id="textbox-container" style="display: none">
+          <div id="textbox">
+            <p id="dialogue" class="ui-text"></p>
+            <div class="btn-container">
+              <button id="view-more" class="ui-secondary-btn" style="display: none">View More</button>
+              <button id="close" class="ui-close-btn">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <canvas id="game" tabindex="0"></canvas>
+    </div>
+
+    <div id="projects-modal" aria-hidden="true">
+      <div class="projects-panel">
+        <div class="projects-header">
+          <h2 class="projects-title">My Projects</h2>
+          <button id="projects-close" class="projects-close" aria-label="Close projects modal">
+            &times;
+          </button>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                class="project-image"
+                src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1200&q=80"
+                alt="Unicorn ecommerce web preview"
+                loading="lazy"
+                decoding="async"
+                data-fallback-image="/project-fallback.svg"
+              />
+            </div>
+            <div class="project-content">
+              <h3>Unicorn - Ecommerce Web</h3>
+              <p>
+                Team size: 5. Role: Fullstack developer. Key contributions: login, register,
+                homepage/admin features, and 2FA SMS flow.
+              </p>
+              <div class="project-tags">
+                <span>Next.js</span>
+                <span>Node.js Express</span>
+                <span>MongoDB</span>
+                <span>MUI</span>
+                <span>Redux</span>
+                <span>NextAuth</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/lethinh2003/TMDT_UNICORN_SERVER" target="_blank" rel="noreferrer">Server Repo</a>
+                <a class="secondary" href="https://github.com/lethinh2003/TMDT_UNICORN_UI" target="_blank" rel="noreferrer">Client Repo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                class="project-image"
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
+                alt="Youtube emotions analyze web preview"
+                loading="lazy"
+                decoding="async"
+                data-fallback-image="/project-fallback.svg"
+              />
+            </div>
+            <div class="project-content">
+              <h3>Youtube Emotions Analyze Web</h3>
+              <p>
+                Dual project. Role: Front-end and back-end developer. Built AI-assisted labeling
+                for Youtube videos using comments/transcripts for recommendation workflows.
+              </p>
+              <div class="project-tags">
+                <span>FastAPI</span>
+                <span>Next.js</span>
+                <span>MongoDB</span>
+                <span>HumeAI</span>
+                <span>Youtube API v3</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/trungnguyen32182/Youtube-video-labelling" target="_blank" rel="noreferrer">GitHub</a>
+                <a class="secondary disabled" href="#" aria-disabled="true">Live Demo N/A</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                class="project-image"
+                src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
+                alt="2D web game portfolio preview"
+                loading="lazy"
+                decoding="async"
+                data-fallback-image="/project-fallback.svg"
+              />
+            </div>
+            <div class="project-content">
+              <h3>2D Web Game Portfolio</h3>
+              <p>
+                Interactive portfolio game built on a tile-map world. Main focus: movement,
+                interaction checkpoints, and game-style presentation of personal content.
+              </p>
+              <div class="project-tags">
+                <span>React + Vite</span>
+                <span>Phaser</span>
+                <span>Tiled Map</span>
+              </div>
+              <div class="project-links">
+                <a class="disabled" href="#" aria-disabled="true">GitHub Updating</a>
+                <a class="secondary disabled" href="#" aria-disabled="true">Live Demo N/A</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                class="project-image"
+                src="https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=1200&q=80"
+                alt="NaSocial media social web preview"
+                loading="lazy"
+                decoding="async"
+                data-fallback-image="/project-fallback.svg"
+              />
+            </div>
+            <div class="project-content">
+              <h3>NaSocial - Media Social Web</h3>
+              <p>
+                Individual project. Features include realtime messaging, notifications, audio/video
+                calling, profile pages, and post uploads.
+              </p>
+              <div class="project-tags">
+                <span>Next.js 14</span>
+                <span>Express REST API</span>
+                <span>Socket.io</span>
+                <span>MongoDB</span>
+                <span>WebRTC</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/ZinzZ/NaS_UI" target="_blank" rel="noreferrer">GitHub</a>
+                <a class="secondary disabled" href="#" aria-disabled="true">Live Demo N/A</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div id="experience-modal" aria-hidden="true">
+      <section class="experience-panel" aria-labelledby="experience-title">
+        <p class="experience-eyebrow">Career Highlights</p>
+        <h2 id="experience-title" class="experience-title">Professional Experience</h2>
+        <p class="experience-intro">
+          I build reliable, high-performance web products with a strong focus on UX clarity,
+          responsiveness, and maintainable front-end architecture.
+        </p>
+
+        <div class="experience-timeline">
+          <article class="experience-card">
+            <div class="experience-head">
+              <div>
+                <h3 class="experience-role">Web Front-end Developer</h3>
+                <p class="experience-company">Hephaestus Tech</p>
+              </div>
+              <span class="experience-period">August 2025 - Present</span>
+            </div>
+
+            <p class="experience-description">
+              I am currently working as a Web Front-end Developer at Hephaestus Tech. I have
+              contributed to 3 end-to-end projects: Learning Management System (LMS), Quantitative
+              Trading Platform &amp; Community, and Agent Trading Game Mini App.
+            </p>
+
+            <p class="experience-block-title">Key Responsibilities</p>
+            <ul class="experience-points">
+              <li>Designed and implemented modern UI/UX interfaces.</li>
+              <li>Developed core web functionalities ensuring smooth user experience.</li>
+              <li>Built responsive and user-friendly interfaces.</li>
+              <li>Supported admin dashboard development.</li>
+              <li>Improved SEO and website performance.</li>
+            </ul>
+
+            <p class="experience-block-title">Tech Stack</p>
+            <div class="experience-stack" aria-label="Tech stack used at Hephaestus Tech">
+              <span class="experience-chip">React</span>
+              <span class="experience-chip">Vite</span>
+              <span class="experience-chip">Next.js</span>
+              <span class="experience-chip">Tailwind CSS</span>
+            </div>
+          </article>
+
+          <hr class="experience-divider" />
+
+          <article class="experience-card">
+            <div class="experience-head">
+              <div>
+                <h3 class="experience-role">Web Developer Intern</h3>
+                <p class="experience-company">MstarCorp</p>
+              </div>
+              <span class="experience-period">October - December 2024</span>
+            </div>
+
+            <p class="experience-description">
+              Completed a 3-month internship at MstarCorp working with React, Laravel, MySQL, and
+              WordPress.
+            </p>
+
+            <p class="experience-block-title">Key Contributions</p>
+            <ul class="experience-points">
+              <li>
+                Developed UI and integrated features for a Zalo Mini App e-commerce project using
+                React Native and ZaUI.
+              </li>
+              <li>
+                Participated in designing and deploying a corporate website using Figma and
+                WordPress.
+              </li>
+            </ul>
+
+            <p class="experience-description">
+              This experience provided valuable hands-on practice in full-stack web development.
+            </p>
+          </article>
+        </div>
+
+        <div class="experience-footer">
+          <button id="experience-close" class="experience-close-btn" type="button">Close</button>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

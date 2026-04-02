@@ -1,0 +1,30 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="45" x2="1040" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DBEAFE"/>
+      <stop offset="0.5" stop-color="#FFE7CF"/>
+      <stop offset="1" stop-color="#E0F2FE"/>
+    </linearGradient>
+    <linearGradient id="card" x1="350" y1="174" x2="850" y2="501" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#EFF6FF" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" rx="34" fill="url(#bg)"/>
+  <circle cx="980" cy="90" r="130" fill="#F97316" fill-opacity="0.18"/>
+  <circle cx="180" cy="595" r="170" fill="#0EA5E9" fill-opacity="0.16"/>
+
+  <rect x="322" y="144" width="556" height="387" rx="28" fill="url(#card)" stroke="#CBD5E1" stroke-width="4"/>
+  <rect x="396" y="218" width="408" height="174" rx="18" fill="#E2E8F0"/>
+
+  <path d="M458 371L542 293L608 350L668 306L742 371" stroke="#64748B" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="538" cy="266" r="24" fill="#94A3B8"/>
+
+  <text x="600" y="450" fill="#0F172A" font-size="52" font-family="Trebuchet MS, sans-serif" text-anchor="middle">
+    Project Preview
+  </text>
+  <text x="600" y="495" fill="#334155" font-size="33" font-family="Trebuchet MS, sans-serif" text-anchor="middle">
+    Image unavailable
+  </text>
+</svg>
